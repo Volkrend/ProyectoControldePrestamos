@@ -31,7 +31,7 @@ public class Categoria {
 		items.add(i);
 	}
 	
-	public void elimarItem(Item i) {
+	public void eliminarItem(Item i) {
 		items.remove(i);
 	}
 }

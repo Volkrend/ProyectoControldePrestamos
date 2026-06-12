@@ -42,9 +42,11 @@ public class Prestamo {
 	
 	public void agregarItem(Item i) {
 		items.add(i);
+		i.setPrestamo(this); //bidireccionales
 	}
 	
-	public void eliminarIem(Item i) {
+	public void eliminarItem(Item i) {
 		items.remove(i);
+		i.setPrestamo(null); //
 	}
 }

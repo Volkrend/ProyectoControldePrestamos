@@ -43,7 +43,7 @@ public class Persona {
 		return prestamos;
 	}
 	
-	public void agregarPrestamos(Prestamo p) {
+	public void agregarPrestamo(Prestamo p) {
 		prestamos.add(p);
 	}
 	
@@ -51,7 +51,7 @@ public class Persona {
 		prestamos.remove(p);
 	}
 	
-	public boolean tienePrestamo() {
+	public boolean tienePrestamos() {
 		return !prestamos.isEmpty();
 	}
 }
