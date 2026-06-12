@@ -140,9 +140,11 @@ public class ControladoraPrestamos {
   	}
    
   	public void modificarTipo(String nombre, String nuevoNombre) {
-        Persona p = personas.get(nombre);
-        p.setNombre(nuevoNombre);
-    }
+  	    Tipo t = tipos.get(nombre);
+  	    tipos.remove(nombre);
+  	    t.setNombre(nuevoNombre);
+  	    tipos.put(nuevoNombre, t);
+  	}
   	
   	public void borrarTipo(String nombre) {
   	    tipos.remove(nombre);
@@ -154,7 +156,7 @@ public class ControladoraPrestamos {
   	
   	// PRESTAMO
     
-  	public void crearPrestamo(String correo, ArrayList<Item> items, String datosA) { //alertas
+  	public void crearPrestamo(String correo, ArrayList<Item> items) { //alertas
   	    Persona persona = personas.get(correo);
   	    Prestamo prestamo = new Prestamo(persona);
   	    for (Item i : items) {
@@ -201,5 +203,62 @@ public class ControladoraPrestamos {
   	    }
   	    return resultado;
   	}
+  	
 
+ 
+  	//
+
+    public ArrayList<Item> obtenerItems() {
+        return items;
+    }
+
+    public ArrayList<Prestamo> obtenerPrestamos() {
+        return prestamos;
+    }
+
+    public ArrayList<Persona> obtenerPersonas() {
+        return new ArrayList<>(personas.values());
+    }
+
+    public ArrayList<Categoria> obtenerCategorias() {
+        return new ArrayList<>(categorias.values());
+    }
+
+    public ArrayList<Tipo> obtenerTipos() {
+        return new ArrayList<>(tipos.values());
+    }
+
+
+    // REPORTES
+
+ // Solo personas CON prestamos
+    public ArrayList<Persona> reportePorUsuario() {
+        ArrayList<Persona> resultado = new ArrayList<>();
+        for (Persona p : personas.values()) {
+            if (p.tienePrestamos()) {
+                resultado.add(p);
+            }
+        }
+        return resultado;
+    }
+
+    // Solo items CON prestamo 
+    public ArrayList<Item> reportePorItem() {
+        ArrayList<Item> resultado = new ArrayList<>();
+        for (Item i : items) {
+            if (!i.estaDisponible()) {
+                resultado.add(i);
+            }
+        }
+        return resultado;
+    }
+
+    // Categorias con sus items 
+    public ArrayList<Categoria> reportePorCategoria() {
+        return new ArrayList<>(categorias.values());
+    }
+
+    public ArrayList<Tipo> reportePorTipo() {
+        return new ArrayList<>(tipos.values());
+    }
 }
