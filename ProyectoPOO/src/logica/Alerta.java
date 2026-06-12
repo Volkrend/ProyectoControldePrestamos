@@ -43,5 +43,14 @@ public class Alerta {
 		return fechaActivacion;
 	}
 	
-   
+	public void actualizarFecha() { //para metodos
+	    if (esRecurrente) {
+	        fechaActivacion = fechaActivacion.plusDays(intervalo);
+	    }
+	}
+	
+	public boolean debeActivarse() { //controladora
+	    return LocalDateTime.now().toLocalDate()
+	           .equals(fechaActivacion.toLocalDate());
+	}
 }

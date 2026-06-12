@@ -1,13 +1,13 @@
 package control;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.TreeMap;
-import java.util.Comparator;
 
 import logica.Item;
 import logica.Persona;
 import logica.Prestamo;
+import logica.Alerta;
 import logica.Categoria;
 import logica.Tipo;
 
@@ -40,7 +40,7 @@ public class ControladoraPrestamos {
 
     // ITEM
 
-    // crea un item
+    //
     public void crearItem(String nombre, String descripcion, Tipo tipo, ArrayList<Categoria> categorias) {
         Item item = new Item(nombre, descripcion, tipo);
         for (Categoria c : categorias) {
@@ -132,6 +132,74 @@ public class ControladoraPrestamos {
         return categorias.get(nombre);
     }
 
-
+    //TIPO
+	
+  	public void crearTipo(String nombre) {
+  		Tipo t = new Tipo(nombre);
+  		tipos.put(nombre, t);
+  	}
    
+  	public void modificarTipo(String nombre, String nuevoNombre) {
+        Persona p = personas.get(nombre);
+        p.setNombre(nuevoNombre);
+    }
+  	
+  	public void borrarTipo(String nombre) {
+  	    tipos.remove(nombre);
+  	}
+
+  	public Tipo consultarTipo(String nombre) {
+  		return tipos.get(nombre);
+  	}
+  	
+  	// PRESTAMO
+    
+  	public void crearPrestamo(String correo, ArrayList<Item> items, String datosA) { //alertas
+  	    Persona persona = personas.get(correo);
+  	    Prestamo prestamo = new Prestamo(persona);
+  	    for (Item i : items) {
+  	        prestamo.agregarItem(i);
+  	    }
+  	    persona.agregarPrestamo(prestamo);
+  	    prestamos.add(prestamo);
+  	}
+  	
+  	public void agregarAlerta(Prestamo prestamo, String mensaje, boolean esRecurrente, int intervalo, LocalDateTime fechaActivacion) { //"Si lo desea, el usuario crea una alerta para el préstamo"
+	Alerta alerta = new Alerta(mensaje, esRecurrente, intervalo, fechaActivacion);
+	prestamo.setAlerta(alerta);
+	
+	}
+
+  	public void agregarItemP(String nombre, Prestamo prestamo) throws Exception {
+  	    Item item = consultarItem(nombre);
+  	    prestamo.agregarItem(item);
+  	}
+
+  	public void eliminarItemP(String nombre, Prestamo prestamo) throws Exception {
+  	    Item item = consultarItem(nombre);
+  	    prestamo.eliminarItem(item);
+  	}
+
+
+  	public void finalizarPrestamo(Prestamo prestamo) {
+  	    ArrayList<Item> copia = new ArrayList<>(prestamo.getItems()); //copia para evitar erroe
+  	    for (Item i : copia) {
+  	        prestamo.eliminarItem(i);
+  	    }
+  	    prestamo.getPersona().eliminarPrestamo(prestamo);
+  	    prestamos.remove(prestamo);
+  	}
+
+    
+  	public ArrayList<Prestamo> obtenerDatosAlerta() { //cambios
+  	    ArrayList<Prestamo> resultado = new ArrayList<>();
+  	    for (Prestamo p : prestamos) {
+  	        if (p.getAlerta() != null && p.getAlerta().debeActivarse()) {
+  	            resultado.add(p);
+  	            p.getAlerta().actualizarFecha();
+  	        }
+  	    }
+  	    return resultado;
+  	}
+
 }
